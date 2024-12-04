@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "../config";
 
 interface IUser extends Document {
   fullname: {
@@ -48,10 +49,7 @@ const userSchema = new Schema<IUser>({
 });
 
 userSchema.methods.generateAuthToken = function () {
-  const token = jwt.sign(
-    { _id: this._id },
-    process.env.JWT_SECRET || "sec3ret",
-  );
+  const token = jwt.sign({ _id: this._id }, JWT_SECRET, { expiresIn: "24h" });
   return token;
 };
 

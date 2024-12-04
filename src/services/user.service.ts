@@ -1,12 +1,12 @@
 import { z } from "zod";
-import { userValidation } from "../zod/userValidation";
 import { userModel } from "../models/user.model";
+import { userRegisterValidation } from "../zod/userValidation";
 
-type UserInput = z.infer<typeof userValidation>;
+type UserInput = z.infer<typeof userRegisterValidation>;
 
 export const createUser = async ({ fullname, email, password }: UserInput) => {
   try {
-    userValidation.parse({ email, password, fullname });
+    userRegisterValidation.parse({ email, password, fullname });
 
     const user = userModel.create({
       fullname,
