@@ -41,4 +41,9 @@ export const captainRegisterValidation = z.object({
     .optional(),
 });
 
+export const captainLoginValidation = z.object({
+  email: z.string().email("Invalid Email"),
+  password: z.string().min(6, "Password should be at least 6 characters long"),
+});
+
 export type CaptainInput = z.infer<typeof captainRegisterValidation>;

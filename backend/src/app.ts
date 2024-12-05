@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 import { ConnectToDb } from "./db/db";
 import { UserRouter } from "./routes/user.routes";
@@ -17,4 +17,4 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/users", UserRouter);
-app.use("/captain", CaptainRouter);
+app.use("/captains", CaptainRouter);
