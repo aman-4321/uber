@@ -99,7 +99,12 @@ export const logoutUser = async (req: Request, res: Response) => {
   res.clearCookie("token");
   const token = req.cookies.token || req.headers.authorization;
 
-  await blacklistToken.create({ token });
+  const tokenExists = await blacklistToken.findOne({ token })
+
+  if(!tokenExists){
+    await blacklistToken.create({ token });
+  }
+
 
   res.status(200).json({
     message: "Logged Out",

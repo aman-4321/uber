@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import UserContext from "../context/UserContext";
 
 const UserSignup = () => {
   const [email, setEmail] = useState("");
@@ -8,17 +10,39 @@ const UserSignup = () => {
   const [firstname, setFirstname] = useState("");
   const [userData, setUserData] = useState({});
 
-  const submitHandler = (e: React.FormEvent) => {
+  const navigate = useNavigate();
+
+  const context = useContext(UserContext);
+
+  if (!context) {
+    throw new Error("useUser must be used within a UserProvider");
+  }
+
+  const { user, setUser } = context;
+
+  const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    setUserData({
-      fullName: {
+    const newUser = {
+      fullname: {
         firstname: firstname,
         lastname: lastname,
       },
-      password: password,
       email: email,
-    });
+      password: password,
+    };
+
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/users/register`,
+      newUser,
+    );
+
+    if (response.status === 201) {
+      const data = response.data;
+      setUser(data.user);
+      localStorage.setItem("token", data.token);
+      navigate("/home");
+    }
 
     setFirstname("");
     setLastname("");
@@ -80,7 +104,7 @@ const UserSignup = () => {
           />
 
           <button className="bg-[#111] text-white font-semibold mb-3 rounded py-2 px-4 w-full text-lg placeholder:text-base">
-            Login
+            Create account
           </button>
         </form>
 
