@@ -9,11 +9,11 @@ import CaptainContext from "./context/CaptainContext.tsx";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <CaptainContext>
-    <UserProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </UserProvider>
+      <UserProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </UserProvider>
     </CaptainContext>
   </StrictMode>,
 );

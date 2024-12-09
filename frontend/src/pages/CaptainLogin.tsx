@@ -12,7 +12,7 @@ const CaptainLogin = () => {
   const context = useContext(CaptainDataContext);
 
   if (!context) {
-    throw new Error("useUser must be used within a UserProvider");
+    throw new Error("User must be used within a UserProvider");
   }
 
   const { setCaptain } = context;
@@ -98,3 +98,4 @@ const CaptainLogin = () => {
 };
 
 export default CaptainLogin;
+

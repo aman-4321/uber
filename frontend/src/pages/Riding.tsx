@@ -13,18 +13,20 @@ const Riding = () => {
         <img
           className="h-full w-full object-cover"
           src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
+          alt=""
         />
       </div>
       <div className="h-1/2 p-4">
         <div className="flex items-center justify-between">
           <img
             className="h-12"
-            src="https://www.pngplay.com/wp-content/uploads/8/Uber-PNG-Photos.png"
+            src="https://swyft.pl/wp-content/uploads/2023/05/how-many-people-can-a-uberx-take.jpg"
+            alt=""
           />
           <div className="text-right">
-            <h2 className="text-lg font-medium">Aman</h2>
-            <h4 className="text-xl font-semibold -mt-1 -mb-1">m204ab1234</h4>
-            <p className="text-sm text-gray-600">Maruti suzuki</p>
+            <h2 className="text-lg font-medium">Sarthak</h2>
+            <h4 className="text-xl font-semibold -mt-1 -mb-1">MP04 AB 1234</h4>
+            <p className="text-sm text-gray-600">Maruti Suzuki Alto</p>
           </div>
         </div>
 
@@ -35,21 +37,21 @@ const Riding = () => {
               <div>
                 <h3 className="text-lg font-medium">562/11-A</h3>
                 <p className="text-sm -mt-1 text-gray-600">
-                  Kanakriya talab, ahemdabad
+                  Kankariya Talab, Bhopal
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-5 p-3">
-              <i className="text-lg ri-currency-line"></i>
+              <i className="ri-currency-line"></i>
               <div>
-                <h3 className="text-lg font-medium">💵193</h3>
+                <h3 className="text-lg font-medium">₹193.20 </h3>
                 <p className="text-sm -mt-1 text-gray-600">Cash Cash</p>
               </div>
             </div>
           </div>
         </div>
-        <button className="w-full bg-green-500 text-white font-semibold p-2 rounded-lg mt-10">
-          Make a payment
+        <button className="w-full mt-5 bg-green-600 text-white font-semibold p-2 rounded-lg">
+          Make a Payment
         </button>
       </div>
     </div>

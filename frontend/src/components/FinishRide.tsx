@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
-
-interface RidePanel {
+interface FinishRideProps {
   setFinishRidePanel: (value: boolean) => void;
 }
 
-const FinishRide = ({ setFinishRidePanel }: RidePanel) => {
+const FinishRide = ({ setFinishRidePanel }: FinishRideProps) => {
   return (
     <div>
       <h5

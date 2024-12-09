@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-interface ConfirmRide {
+interface ConfirmRidePopUpProps {
   setRidePopupPanel: (value: boolean) => void;
   setConfirmRidePopupPanel: (value: boolean) => void;
 }
 
 const ConfirmRidePopUp = ({
-  setConfirmRidePopupPanel,
   setRidePopupPanel,
-}: ConfirmRide) => {
+  setConfirmRidePopupPanel,
+}: ConfirmRidePopUpProps) => {
   const [otp, setOtp] = useState("");
 
   const submitHander = (e: React.FormEvent) => {
@@ -33,7 +33,6 @@ const ConfirmRidePopUp = ({
           <img
             className="h-12 rounded-full object-cover w-12"
             src="https://i.pinimg.com/236x/af/26/28/af26280b0ca305be47df0b799ed1b12b.jpg"
-            alt=""
           />
           <h2 className="text-lg font-medium">Harshi Pateliya</h2>
         </div>
