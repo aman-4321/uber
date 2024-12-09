@@ -20,7 +20,7 @@ const ConfirmRide = ({ setConfirmRidePanel, setVehicleFound }: Panel) => {
           className="h-20"
           src="https://www.pngplay.com/wp-content/uploads/8/Uber-PNG-Photos.png"
         />
-        <div className="w-full">
+        <div className="w-full mt-5">
           <div className="flex items-center gap-5 p-3 border-b-2">
             <i className="text-lg ri-map-pin-2-fill"></i>
             <div>
@@ -50,10 +50,11 @@ const ConfirmRide = ({ setConfirmRidePanel, setVehicleFound }: Panel) => {
         <button
           onClick={() => {
             setVehicleFound(true);
+            setConfirmRidePanel(false);
           }}
           className="w-full bg-green-500 text-white font-semibold p-2 rounded-lg"
         >
-          Confirm 5.43 hours
+          Confirm
         </button>
       </div>
     </div>

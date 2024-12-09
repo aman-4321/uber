@@ -1,31 +1,33 @@
-interface waitingDriver {
-  WaitForDriver: (value: boolean) => void;
+interface ridepop {
+  setRidePopUpPanel: (value: boolean) => void;
+  setConfirmRidePopupPanel: (value: boolean) => void;
 }
 
-const WaitingForDriver = ({ WaitForDriver }: waitingDriver) => {
+const RidePopUp = ({
+  setRidePopUpPanel,
+  setConfirmRidePopupPanel,
+}: ridepop) => {
   return (
     <div>
       <h5
         onClick={() => {
-          WaitForDriver(false);
+          setRidePopUpPanel(false);
         }}
         className="p-1 text-center w-[93%] absolute top-0"
       >
         <i className="ri-arrow-down-wide-line text-3xl text-gray-200"></i>
       </h5>
-
-      <div className="flex items-center justify-between">
-        <img
-          className="h-12"
-          src="https://www.pngplay.com/wp-content/uploads/8/Uber-PNG-Photos.png"
-        />
-        <div className="text-right">
-          <h2 className="text-lg font-medium">Aman</h2>
-          <h4 className="text-xl font-semibold -mt-1 -mb-1">m204ab1234</h4>
-          <p className="text-sm text-gray-600">Maruti suzuki</p>
+      <h3 className="text-2xl font-semibold mb-5">New Ride Available!</h3>
+      <div className="flex items-center justify-between p-3 mt-4 bg-yellow-400 rounded-lg">
+        <div className="flex items-center gap-3">
+          <img
+            className="h-10 w-10 object-cover rounded-full"
+            src="https://t4.ftcdn.net/jpg/06/78/09/75/360_F_678097580_mgsNEISedI7fngOwIipYtEU0T6SN8qKv.jpg"
+          />
+          <h2 className="text-lg font-medium">aman kumar</h2>
         </div>
+        <h5 className="text-lg font-semibold">2.2 km</h5>
       </div>
-
       <div className="flex gap-2 justify-between flex-col items-center">
         <div className="w-full mt-5">
           <div className="flex items-center gap-5 p-3 border-b-2">
@@ -54,9 +56,29 @@ const WaitingForDriver = ({ WaitForDriver }: waitingDriver) => {
             </div>
           </div>
         </div>
+        <div className="mt-5 w-full ">
+          <button
+            onClick={() => {
+              setConfirmRidePopupPanel(true);
+            }}
+            className="w-full bg-green-500 text-white font-semibold p-2 px-10 rounded-lg"
+          >
+            Accept
+          </button>
+
+          <button
+            onClick={() => {
+              setRidePopUpPanel(false);
+            }}
+            className="w-full mt-2 bg-gray-300 text-gray-700 font-semibold p-2 px-10 rounded-lg"
+          >
+            Ignore
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
-export default WaitingForDriver;
+export default RidePopUp;
+

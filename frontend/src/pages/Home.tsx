@@ -6,19 +6,23 @@ import LocationSearchPanel from "../components/LocationSearchPanel";
 import VehiclePanel from "../components/VehiclePanel";
 import ConfirmRide from "../components/ConfirmRide";
 import LookingForDriver from "../components/LookingForDriver";
+import WaitingForDriver from "../components/WaitingForDriver";
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
   const [panelOpen, setPanelOpen] = useState(false);
-  const panelRef = useRef(null);
-  const vehiclePanelRef = useRef(null);
-  const panelCloseRef = useRef(null);
-  const confirmRidePanelRef = useRef(null);
-  const vehicleFoundRef = useRef(null);
   const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false);
   const [confirmRidePanel, setConfirmRidePanel] = useState(false);
   const [vehicleFound, setVehicleFound] = useState(false);
+  const [waitingForDriver, setwaitingForDriver] = useState(false);
+
+  const vehiclePanelRef = useRef(null);
+  const confirmRidePanelRef = useRef(null);
+  const vehicleFoundRef = useRef(null);
+  const waitingForDriverRef = useRef(null);
+  const panelRef = useRef(null);
+  const panelCloseRef = useRef(null);
 
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,6 +86,18 @@ const Home = () => {
     }
   }, [vehicleFound]);
 
+  useGSAP(() => {
+    if (waitingForDriver) {
+      gsap.to(waitingForDriverRef.current, {
+        transform: "translateY(0)",
+      });
+    } else {
+      gsap.to(waitingForDriverRef.current, {
+        transform: "translateY(100%)",
+      });
+    }
+  }, [waitingForDriver]);
+
   return (
     <div className="h-screen relative overflow-hidden">
       <img
@@ -111,7 +127,7 @@ const Home = () => {
               submitHandler(e);
             }}
           >
-            <div className="absolute h-16 w-1 top-[40%] left-10 bg-gray-900 rounded-full"></div>
+            <div className="absolute h-16 w-1 top-[50%] -translate-y-1/2 left-5 bg-gray-700 rounded-full"></div>
             <input
               className="bg-[#eee] px-8 py-2 text-base rounded-lg w-full mt-5"
               type="text"
@@ -163,7 +179,14 @@ const Home = () => {
         ref={vehicleFoundRef}
         className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
       >
-        <LookingForDriver></LookingForDriver>
+        <LookingForDriver setVehicleFound={setVehicleFound}></LookingForDriver>
+      </div>
+
+      <div
+        ref={waitingForDriverRef}
+        className="fixed w-full z-10 bottom-0 bg-white px-3 py-6 pt-12"
+      >
+        <WaitingForDriver WaitForDriver={setwaitingForDriver}></WaitingForDriver>
       </div>
     </div>
   );
