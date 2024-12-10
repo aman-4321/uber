@@ -1,8 +1,27 @@
-interface WaitingForDriverProps {
-  waitingForDriver: (value: boolean) => void;
+interface Captain {
+  fullname: {
+    firstname: string;
+  };
+  vehicle: {
+    plate: string;
+  };
 }
 
-const WaitingForDriver = ({ waitingForDriver }: WaitingForDriverProps) => {
+interface Ride {
+  captain: Captain;
+  pickup: string;
+  destination: string;
+  fare: number;
+}
+interface WaitingForDriverProps {
+  waitingForDriver: (value: boolean) => void;
+  ride?: Ride;
+}
+
+const WaitingForDriver = ({
+  waitingForDriver,
+  ride,
+}: WaitingForDriverProps) => {
   return (
     <div>
       <h5
@@ -21,8 +40,12 @@ const WaitingForDriver = ({ waitingForDriver }: WaitingForDriverProps) => {
           alt=""
         />
         <div className="text-right">
-          <h2 className="text-lg font-medium">Sarthak</h2>
-          <h4 className="text-xl font-semibold -mt-1 -mb-1">MP04 AB 1234</h4>
+          <h2 className="text-lg font-medium">
+            {ride?.captain.fullname.firstname}
+          </h2>
+          <h4 className="text-xl font-semibold -mt-1 -mb-1">
+            {ride?.captain.vehicle.plate}
+          </h4>
           <p className="text-sm text-gray-600">Maruti Suzuki Alto</p>
         </div>
       </div>
@@ -33,24 +56,20 @@ const WaitingForDriver = ({ waitingForDriver }: WaitingForDriverProps) => {
             <i className="ri-map-pin-user-fill"></i>
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
-              <p className="text-sm -mt-1 text-gray-600">
-                Kankariya Talab, Bhopal
-              </p>
+              <p className="text-sm -mt-1 text-gray-600">{ride?.pickup}</p>
             </div>
           </div>
           <div className="flex items-center gap-5 p-3 border-b-2">
             <i className="text-lg ri-map-pin-2-fill"></i>
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
-              <p className="text-sm -mt-1 text-gray-600">
-                Kankariya Talab, Bhopal
-              </p>
+              <p className="text-sm -mt-1 text-gray-600">{ride?.destination}</p>
             </div>
           </div>
           <div className="flex items-center gap-5 p-3">
             <i className="ri-currency-line"></i>
             <div>
-              <h3 className="text-lg font-medium">₹193.20 </h3>
+              <h3 className="text-lg font-medium">₹{ride?.fare}</h3>
               <p className="text-sm -mt-1 text-gray-600">Cash Cash</p>
             </div>
           </div>

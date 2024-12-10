@@ -1,11 +1,30 @@
+type VehicleType = "car" | "moto" | "auto";
+
+interface FareTypes {
+  car: number;
+  moto: number;
+  auto: number;
+}
+
 interface ConfirmRideProps {
   setConfirmRidePanel: (value: boolean) => void;
   setVehicleFound: (value: boolean) => void;
+  createRide: () => void;
+  pickup: string
+  destination: string
+  fare: FareTypes
+  vehicleType: VehicleType
 }
 
 const ConfirmRide = ({
   setConfirmRidePanel,
   setVehicleFound,
+  createRide,
+  pickup,
+  destination,
+  fare,
+  vehicleType
+  
 }: ConfirmRideProps) => {
   return (
     <div>
@@ -31,7 +50,7 @@ const ConfirmRide = ({
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
               <p className="text-sm -mt-1 text-gray-600">
-                Kankariya Talab, Bhopal
+              {pickup}
               </p>
             </div>
           </div>
@@ -40,14 +59,14 @@ const ConfirmRide = ({
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
               <p className="text-sm -mt-1 text-gray-600">
-                Kankariya Talab, Bhopal
+              {destination}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-5 p-3">
             <i className="ri-currency-line"></i>
             <div>
-              <h3 className="text-lg font-medium">₹193.20 </h3>
+              <h3 className="text-lg font-medium">₹{fare[vehicleType]}</h3>
               <p className="text-sm -mt-1 text-gray-600">Cash Cash</p>
             </div>
           </div>
@@ -56,6 +75,7 @@ const ConfirmRide = ({
           onClick={() => {
             setVehicleFound(true);
             setConfirmRidePanel(false);
+          createRide()
           }}
           className="w-full mt-5 bg-green-600 text-white font-semibold p-2 rounded-lg"
         >

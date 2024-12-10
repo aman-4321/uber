@@ -30,7 +30,7 @@ const UserProtectedWrapper = ({ children }: { children: ReactNode }) => {
     })
     .then((response) => {
       if (response.status === 200) {
-        setUser(response.data.user);
+        setUser(response.data);
         setIsLoading(false);
       }
     })

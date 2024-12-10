@@ -19,7 +19,7 @@ interface ICaptain extends Document {
     vehicleType: "car" | "motorcycle" | "auto";
   };
   location?: {
-    lat?: number;
+    ltd?: number;
     lng?: number;
   };
 
@@ -95,7 +95,7 @@ const captainSchema = new Schema<ICaptain>({
   },
 
   location: {
-    lat: {
+    ltd: {
       type: Number,
     },
     lng: {
@@ -119,5 +119,5 @@ captainSchema.statics.hashPassword = async function (password: string) {
 
 export const captainModel = mongoose.model<ICaptain, ICaptainModel>(
   "captain",
-  captainSchema,
+  captainSchema
 );

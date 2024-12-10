@@ -1,4 +1,16 @@
+import { useContext } from "react";
+import { CaptainDataContext } from "../context/CaptainContext";
+
 const CaptainDetails = () => {
+  
+  const context = useContext(CaptainDataContext)
+
+  if (!context) {
+    throw new Error("User must be used within a UserProvider");
+  }
+
+  const { captain } = context
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -7,7 +19,7 @@ const CaptainDetails = () => {
             className="h-10 w-10 rounded-full object-cover"
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdlMd7stpWUCmjpfRjUsQ72xSWikidbgaI1w&s"
           />
-          <h4 className="text-lg font-medium">Harsh Patel</h4>
+          <h4 className="text-lg font-medium capitalize">{captain?.fullname.firstname + " " + captain?.fullname.lastname}</h4>
         </div>
         <div>
           <h4 className="text-xl font-semibold">₹295.20</h4>

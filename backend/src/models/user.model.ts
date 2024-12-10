@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config";
 
-interface IUser extends Document {
+export interface IUser extends Document {
   fullname: {
     firstname: string;
     lastname?: string;

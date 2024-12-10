@@ -1,8 +1,20 @@
-interface LookingForDriverProps {
-  setVehicleFound: (value: boolean) => void;
+type VehicleType = "car" | "moto" | "auto";
+
+interface FareTypes {
+  car: number;
+  moto: number;
+  auto: number;
 }
 
-const LookingForDriver = ({ setVehicleFound }: LookingForDriverProps) => {
+interface LookingForDriverProps {
+  setVehicleFound: (value: boolean) => void;
+  pickup: string
+  destination: string
+  fare: FareTypes
+  vehicleType: VehicleType
+}
+
+const LookingForDriver = ({ setVehicleFound,destination, fare, pickup,  vehicleType }: LookingForDriverProps) => {
   return (
     <div>
       <h5
@@ -27,7 +39,7 @@ const LookingForDriver = ({ setVehicleFound }: LookingForDriverProps) => {
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
               <p className="text-sm -mt-1 text-gray-600">
-                Kankariya Talab, Bhopal
+              {pickup}
               </p>
             </div>
           </div>
@@ -36,14 +48,14 @@ const LookingForDriver = ({ setVehicleFound }: LookingForDriverProps) => {
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
               <p className="text-sm -mt-1 text-gray-600">
-                Kankariya Talab, Bhopal
+              {destination}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-5 p-3">
             <i className="ri-currency-line"></i>
             <div>
-              <h3 className="text-lg font-medium">₹193.20 </h3>
+              <h3 className="text-lg font-medium">₹{fare[vehicleType]}</h3>
               <p className="text-sm -mt-1 text-gray-600">Cash Cash</p>
             </div>
           </div>

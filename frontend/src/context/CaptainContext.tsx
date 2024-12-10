@@ -7,6 +7,7 @@ interface Captain {
   };
   email: string;
   password: string;
+  _id: string;
 }
 
 interface CaptainContextType {
@@ -20,7 +21,7 @@ interface CaptainContextType {
 }
 
 export const CaptainDataContext = createContext<CaptainContextType | undefined>(
-  undefined,
+  undefined
 );
 
 const CaptainContext = ({ children }: { children: ReactNode }) => {

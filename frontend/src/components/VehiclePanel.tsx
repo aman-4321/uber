@@ -1,11 +1,23 @@
+interface FareTypes {
+  car: number;
+  moto: number;
+  auto: number;
+}
+
+type VehicleType = "car" | "moto" | "auto";
+
 interface VehiclePanelProps {
   setVehiclePanel: (value: boolean) => void;
   setConfirmRidePanel: (value: boolean) => void;
+  fare: FareTypes;
+  setVehicle: (value: VehicleType) => void;
 }
 
 const VehiclePanel = ({
   setConfirmRidePanel,
   setVehiclePanel,
+  fare,
+  setVehicle
 }: VehiclePanelProps) => {
   return (
     <div>
@@ -20,14 +32,14 @@ const VehiclePanel = ({
       <h3 className="text-2xl font-semibold mb-5">Choose a Vehicle</h3>
       <div
         onClick={() => {
-          setConfirmRidePanel(true);
+        setConfirmRidePanel(true);
+        setVehicle("car")
         }}
         className="flex border-2 active:border-black  mb-2 rounded-xl w-full p-3  items-center justify-between"
       >
         <img
           className="h-10"
           src="https://swyft.pl/wp-content/uploads/2023/05/how-many-people-can-a-uberx-take.jpg"
-          alt=""
         />
         <div className="ml-2 w-1/2">
           <h4 className="font-medium text-base">
@@ -41,11 +53,12 @@ const VehiclePanel = ({
             Affordable, compact rides
           </p>
         </div>
-        <h2 className="text-lg font-semibold">₹193.20</h2>
+        <h2 className="text-lg font-semibold">${fare.car}</h2>
       </div>
       <div
         onClick={() => {
           setConfirmRidePanel(true);
+        setVehicle("moto")
         }}
         className="flex border-2 active:border-black mb-2 rounded-xl w-full p-3  items-center justify-between"
       >
@@ -66,11 +79,12 @@ const VehiclePanel = ({
             Affordable motorcycle rides
           </p>
         </div>
-        <h2 className="text-lg font-semibold">₹65</h2>
+        <h2 className="text-lg font-semibold">${fare.moto}</h2>
       </div>
       <div
         onClick={() => {
           setConfirmRidePanel(true);
+        setVehicle("auto")
         }}
         className="flex border-2 active:border-black mb-2 rounded-xl w-full p-3  items-center justify-between"
       >
@@ -91,7 +105,7 @@ const VehiclePanel = ({
             Affordable Auto rides
           </p>
         </div>
-        <h2 className="text-lg font-semibold">₹118.86</h2>
+        <h2 className="text-lg font-semibold">${fare.auto}</h2>
       </div>
     </div>
   );
