@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import {
   getAddressCoordinate,
   getAutoCompleteSuggestions,
@@ -7,11 +7,7 @@ import {
 import { distanceTimeValidation, mapValidation } from "../zod/mapsValidation";
 import { z } from "zod";
 
-export const getCoordinates = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const getCoordinates = async (req: Request, res: Response) => {
   const { data, error, success } = mapValidation.safeParse(req.query);
 
   if (!success) {
@@ -29,17 +25,20 @@ export const getCoordinates = async (
     res.status(200).json({
       coordinates,
     });
+    return;
   } catch (error) {
     res.status(404).json({
       message: "Coordinate not found",
+      error: error,
     });
+    return;
   }
 };
 
 export const getDistanceTime = async (req: Request, res: Response) => {
   try {
     const { data, error, success } = distanceTimeValidation.safeParse(
-      req.query,
+      req.query
     );
 
     if (!success) {
@@ -71,32 +70,34 @@ const autoCompleteValidation = z.object({
 
 export const getAutoCompleteSuggestion = async (
   req: Request,
-  res: Response,
+  res: Response
 ) => {
   try {
     const { data, success, error } = autoCompleteValidation.safeParse(
-      req.query,
+      req.query
     );
 
     if (!success) {
-      return res.status(400).json({
+      res.status(400).json({
         message: "Invalid input",
         error: error.errors,
       });
+      return;
     }
 
     const { input } = data;
 
     const suggestions = await getAutoCompleteSuggestions(input);
 
-    return res.status(200).json({
+    res.status(200).json({
       suggestions,
     });
+    return;
   } catch (err) {
     console.error(err);
-    return res.status(500).json({
+    res.status(500).json({
       message: "Internal server error",
     });
+    return;
   }
 };
-

@@ -10,10 +10,10 @@ interface ConfirmRideProps {
   setConfirmRidePanel: (value: boolean) => void;
   setVehicleFound: (value: boolean) => void;
   createRide: () => void;
-  pickup: string
-  destination: string
-  fare: FareTypes
-  vehicleType: VehicleType
+  pickup: string;
+  destination: string;
+  fare: FareTypes | null;
+  vehicleType: VehicleType | null;
 }
 
 const ConfirmRide = ({
@@ -23,8 +23,7 @@ const ConfirmRide = ({
   pickup,
   destination,
   fare,
-  vehicleType
-  
+  vehicleType,
 }: ConfirmRideProps) => {
   return (
     <div>
@@ -49,24 +48,22 @@ const ConfirmRide = ({
             <i className="ri-map-pin-user-fill"></i>
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
-              <p className="text-sm -mt-1 text-gray-600">
-              {pickup}
-              </p>
+              <p className="text-sm -mt-1 text-gray-600">{pickup}</p>
             </div>
           </div>
           <div className="flex items-center gap-5 p-3 border-b-2">
             <i className="text-lg ri-map-pin-2-fill"></i>
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
-              <p className="text-sm -mt-1 text-gray-600">
-              {destination}
-              </p>
+              <p className="text-sm -mt-1 text-gray-600">{destination}</p>
             </div>
           </div>
           <div className="flex items-center gap-5 p-3">
             <i className="ri-currency-line"></i>
             <div>
-              <h3 className="text-lg font-medium">₹{fare[vehicleType]}</h3>
+              <h3 className="text-lg font-medium">
+                ₹{vehicleType && fare ? fare[vehicleType] : "N/A"}
+              </h3>
               <p className="text-sm -mt-1 text-gray-600">Cash Cash</p>
             </div>
           </div>
@@ -75,7 +72,7 @@ const ConfirmRide = ({
           onClick={() => {
             setVehicleFound(true);
             setConfirmRidePanel(false);
-          createRide()
+            createRide();
           }}
           className="w-full mt-5 bg-green-600 text-white font-semibold p-2 rounded-lg"
         >

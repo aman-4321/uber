@@ -14,14 +14,15 @@ export const getAddressCoordinate = async (address: string) => {
     if (response.data.status === "OK") {
       const location = response.data.results[0].geometry.location;
       return {
-        ltd: location.ltd,
+        ltd: location.lat,
         lng: location.lng,
       };
     } else {
-      throw new Error("Unable to fetch coordinates");
+      console.error("Google Maps API Error Response:", response.data);
+      throw new Error("Unable to fetch coordinates error in service");
     }
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching coordinates", error);
     throw error;
   }
 };
@@ -48,6 +49,7 @@ export const getdistancetimeresult = async ({
       }
       return response.data.rows[0].elements[0];
     } else {
+      console.log(response.data);
       throw new Error("Unable to fetch distance and time");
     }
   } catch (error) {

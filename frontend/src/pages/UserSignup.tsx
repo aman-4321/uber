@@ -8,7 +8,6 @@ const UserSignup = () => {
   const [password, setPassword] = useState("");
   const [lastname, setLastname] = useState("");
   const [firstname, setFirstname] = useState("");
-  const [userData, setUserData] = useState({});
 
   const navigate = useNavigate();
 
@@ -18,7 +17,7 @@ const UserSignup = () => {
     throw new Error("useUser must be used within a UserProvider");
   }
 
-  const { user, setUser } = context;
+  const { setUser } = context;
 
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +33,7 @@ const UserSignup = () => {
 
     const response = await axios.post(
       `${import.meta.env.VITE_BASE_URL}/users/register`,
-      newUser,
+      newUser
     );
 
     if (response.status === 201) {

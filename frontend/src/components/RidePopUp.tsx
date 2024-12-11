@@ -10,6 +10,7 @@ interface Ride {
   pickup: string;
   destination: string;
   fare: number;
+  _id: string;
 }
 
 interface RidePopUpProps {

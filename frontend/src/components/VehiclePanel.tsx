@@ -9,7 +9,7 @@ type VehicleType = "car" | "moto" | "auto";
 interface VehiclePanelProps {
   setVehiclePanel: (value: boolean) => void;
   setConfirmRidePanel: (value: boolean) => void;
-  fare: FareTypes;
+  fare: FareTypes | null;
   setVehicle: (value: VehicleType) => void;
 }
 
@@ -17,7 +17,7 @@ const VehiclePanel = ({
   setConfirmRidePanel,
   setVehiclePanel,
   fare,
-  setVehicle
+  setVehicle,
 }: VehiclePanelProps) => {
   return (
     <div>
@@ -32,8 +32,8 @@ const VehiclePanel = ({
       <h3 className="text-2xl font-semibold mb-5">Choose a Vehicle</h3>
       <div
         onClick={() => {
-        setConfirmRidePanel(true);
-        setVehicle("car")
+          setConfirmRidePanel(true);
+          setVehicle("car");
         }}
         className="flex border-2 active:border-black  mb-2 rounded-xl w-full p-3  items-center justify-between"
       >
@@ -53,12 +53,12 @@ const VehiclePanel = ({
             Affordable, compact rides
           </p>
         </div>
-        <h2 className="text-lg font-semibold">${fare.car}</h2>
+        <h2 className="text-lg font-semibold">${fare?.car}</h2>
       </div>
       <div
         onClick={() => {
           setConfirmRidePanel(true);
-        setVehicle("moto")
+          setVehicle("moto");
         }}
         className="flex border-2 active:border-black mb-2 rounded-xl w-full p-3  items-center justify-between"
       >
@@ -79,12 +79,12 @@ const VehiclePanel = ({
             Affordable motorcycle rides
           </p>
         </div>
-        <h2 className="text-lg font-semibold">${fare.moto}</h2>
+        <h2 className="text-lg font-semibold">${fare?.moto}</h2>
       </div>
       <div
         onClick={() => {
           setConfirmRidePanel(true);
-        setVehicle("auto")
+          setVehicle("auto");
         }}
         className="flex border-2 active:border-black mb-2 rounded-xl w-full p-3  items-center justify-between"
       >
@@ -105,7 +105,7 @@ const VehiclePanel = ({
             Affordable Auto rides
           </p>
         </div>
-        <h2 className="text-lg font-semibold">${fare.auto}</h2>
+        <h2 className="text-lg font-semibold">${fare?.auto}</h2>
       </div>
     </div>
   );

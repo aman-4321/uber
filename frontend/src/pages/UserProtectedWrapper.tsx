@@ -11,7 +11,7 @@ const UserProtectedWrapper = ({ children }: { children: ReactNode }) => {
   const context = useContext(UserContext);
 
   if (!context) {
-    throw new Error("useUser must be used within a UserProvider");
+    throw new Error("User must be used within a UserProvider");
   }
 
   const { setUser } = context;
@@ -20,25 +20,25 @@ const UserProtectedWrapper = ({ children }: { children: ReactNode }) => {
     if (!token) {
       navigate("/login");
     }
-  }, [token, navigate]);
 
-  axios
-    .get(`${import.meta.env.VITE_BASE_URL}/users/profile`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((response) => {
-      if (response.status === 200) {
-        setUser(response.data);
-        setIsLoading(false);
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      localStorage.removeItem("token");
-      navigate("/login");
-    });
+    axios
+      .get(`${import.meta.env.VITE_BASE_URL}/users/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          setUser(response.data);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        localStorage.removeItem("token");
+        navigate("/login");
+      });
+  }, [token, navigate, setUser]);
 
   if (isLoading) {
     return <div>Loading...</div>;

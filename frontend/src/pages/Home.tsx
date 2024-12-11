@@ -10,12 +10,22 @@ import LookingForDriver from "../components/LookingForDriver";
 import WaitingForDriver from "../components/WaitingForDriver";
 import { SocketContext } from "../context/SocketContext";
 import UserContext from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
+import LiveTracking from "../components/LiveTracking";
 
 type VehicleType = "moto" | "car" | "auto";
 
+interface FareTypes {
+  car: number;
+  moto: number;
+  auto: number;
+}
+
+type ActiveField = "pickup" | "destination" | null | undefined;
+
 const Home = () => {
-  const [pickup, setPickup] = useState("");
-  const [destination, setDestination] = useState("");
+  const [pickup, setPickup] = useState<string>("");
+  const [destination, setDestination] = useState<string>("");
   const [panelOpen, setPanelOpen] = useState(false);
   const [vehiclePanel, setVehiclePanel] = useState(false);
   const [confirmRidePanel, setConfirmRidePanel] = useState(false);
@@ -23,8 +33,8 @@ const Home = () => {
   const [waitingForDriver, setWaitingForDriver] = useState(false);
   const [pickupSuggestions, setPickupSuggestions] = useState([]);
   const [destinationSuggestions, setDestinationSuggestions] = useState([]);
-  const [activeField, setActiveField] = useState(null);
-  const [fare, setFare] = useState(Number);
+  const [activeField, setActiveField] = useState<ActiveField | null>();
+  const [fare, setFare] = useState<FareTypes | null>(null);
   const [vehicleType, setVehicleType] = useState<VehicleType | null>(null);
   const [ride, setRide] = useState(null);
 
@@ -35,11 +45,17 @@ const Home = () => {
   const panelRef = useRef(null);
   const panelCloseRef = useRef(null);
 
+  const navigate = useNavigate();
+
   const userContext = useContext(UserContext);
   const socket = useContext(SocketContext);
 
-  if (!socket || !userContext) {
-    throw new Error("SocketContext and userContext is not provided");
+  if (!userContext) {
+    throw new Error("userContext is not provided");
+  }
+
+  if (!socket) {
+    throw new Error("socket is not provided");
   }
 
   const { user } = userContext;
@@ -54,6 +70,11 @@ const Home = () => {
     setRide(ride);
   });
 
+  socket.on("ride-started", (ride) => {
+    setWaitingForDriver(false);
+    navigate("/riding", { state: { ride } });
+  });
+
   const handlePickupChange = async (e: ChangeEvent<HTMLInputElement>) => {
     setPickup(e.target.value);
     try {
@@ -66,9 +87,11 @@ const Home = () => {
           },
         }
       );
-      setPickupSuggestions(response.data);
-    } catch {
-      // handle error
+      setPickupSuggestions(
+        response.data.suggestions.map((item: any) => item.description)
+      );
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -84,9 +107,11 @@ const Home = () => {
           },
         }
       );
-      setDestinationSuggestions(response.data);
-    } catch {
-      // handle error
+      setDestinationSuggestions(
+        response.data.suggestions.map((item: any) => item.description)
+      );
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -220,7 +245,6 @@ const Home = () => {
         alt=""
       />
       <div className="h-screen w-screen">
-        {/* image for temporary use  */}
         <LiveTracking />
       </div>
       <div className=" flex flex-col justify-end h-screen absolute top-0 w-full">
@@ -267,7 +291,7 @@ const Home = () => {
           </form>
           <button
             onClick={findTrip}
-            className="bg-black text-white px-4 py-2 rounded-lg mt-3 w-full"
+            className="bg-black text-white px-4 py-2 rounded-lg mt-3 w-full mb-10"
           >
             Find Trip
           </button>
@@ -292,8 +316,7 @@ const Home = () => {
         className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
       >
         <VehiclePanel
-          selectVehicle={setVehicleType}
-          createRide={createRide}
+          setVehicle={setVehicleType}
           fare={fare}
           setConfirmRidePanel={setConfirmRidePanel}
           setVehiclePanel={setVehiclePanel}
@@ -301,7 +324,7 @@ const Home = () => {
       </div>
       <div
         ref={confirmRidePanelRef}
-        className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
+        className="fixed w-full z-20 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
       >
         <ConfirmRide
           createRide={createRide}
@@ -315,10 +338,9 @@ const Home = () => {
       </div>
       <div
         ref={vehicleFoundRef}
-        className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
+        className="fixed w-full z-30 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
       >
         <LookingForDriver
-          createRide={createRide}
           pickup={pickup}
           destination={destination}
           fare={fare}
@@ -332,9 +354,7 @@ const Home = () => {
       >
         <WaitingForDriver
           ride={ride}
-          setVehicleFound={setVehicleFound}
-          setWaitingForDriver={setWaitingForDriver}
-          waitingForDriver={waitingForDriver}
+          waitingForDriver={() => setWaitingForDriver(false)}
         />
       </div>
     </div>

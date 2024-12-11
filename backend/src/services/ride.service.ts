@@ -2,6 +2,8 @@ import { rideModel } from "../models/ride.model";
 import { randomInt } from "node:crypto";
 import { getdistancetimeresult } from "./maps.service";
 import { IUser } from "../models/user.model";
+import { sendMessageToSocketId } from "../socket";
+import mongoose, { mongo } from "mongoose";
 
 export const getfare = async (pickup: string, destination: string) => {
   if (!pickup || !destination) {
@@ -131,6 +133,8 @@ export const confirmRide = async ({
       _id: rideId,
     })
     .populate<{ user: IUser }>("user")
+    .populate("captain")
+    .select("+otp")
     .lean();
 
   if (!ride) {
@@ -138,4 +142,113 @@ export const confirmRide = async ({
   }
 
   return ride as unknown as PopulatedRide;
+};
+
+interface PopulatedRideWithUser {
+  _id: mongoose.Types.ObjectId;
+  user: IUser;
+  captain: any;
+  status: string;
+  otp: string;
+}
+
+export const startRide = async ({
+  rideId,
+  otp,
+  captain,
+}: {
+  rideId: string;
+  otp: number;
+  captain: any;
+}): Promise<PopulatedRideWithUser> => {
+  if (!rideId || !otp) {
+    throw new Error("Ride id and otp is required");
+  }
+
+  const ride = await rideModel
+    .findOne({
+      _id: rideId,
+    })
+    .populate<{ user: IUser }>("user")
+    .populate("captain")
+    .select("+otp")
+    .lean();
+
+  if (!ride) {
+    throw new Error("Ride not found");
+  }
+
+  if (ride.status !== "accepted") {
+    throw new Error("Ride not accepted");
+  }
+
+  if (Number(ride.otp) !== otp) {
+    throw new Error("Invalid OTP");
+  }
+
+  await rideModel.findOneAndUpdate(
+    {
+      _id: rideId,
+    },
+    {
+      status: "ongoing",
+    }
+  );
+
+  if (ride.user?.socketId) {
+    sendMessageToSocketId(ride.user?.socketId, {
+      event: "ride-started",
+      data: ride,
+    });
+  }
+
+  return ride as unknown as PopulatedRideWithUser;
+};
+
+interface PopulatedEndRide {
+  _id: mongoose.Types.ObjectId;
+  user: IUser;
+  captain: any;
+  status: string;
+}
+
+export const endRide = async ({
+  rideId,
+  captain,
+}: {
+  rideId: string;
+  captain: any;
+}): Promise<PopulatedEndRide> => {
+  if (!rideId) {
+    throw new Error("Ride id is required");
+  }
+
+  const ride = await rideModel
+    .findOne({
+      _id: rideId,
+      captain: captain._id,
+    })
+    .populate<{ user: IUser }>("user")
+    .populate("captain")
+    .select("+otp")
+    .lean();
+
+  if (!ride) {
+    throw new Error("Ride not found");
+  }
+
+  if (ride.status !== "ongoing") {
+    throw new Error("Ride not ongoing");
+  }
+
+  await rideModel.findOneAndUpdate(
+    {
+      _id: rideId,
+    },
+    {
+      status: "completed",
+    }
+  );
+
+  return ride as unknown as PopulatedEndRide;
 };

@@ -6,7 +6,6 @@ import axios from "axios";
 const UserLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userData, setUserData] = useState({});
 
   const navigate = useNavigate();
 
@@ -15,7 +14,7 @@ const UserLogin = () => {
   if (!context) {
     throw new Error("useUser must be used within a UserProvider");
   }
-  const { user, setUser } = context;
+  const { setUser } = context;
 
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +26,7 @@ const UserLogin = () => {
 
     const response = await axios.post(
       `${import.meta.env.VITE_BASE_URL}/users/login`,
-      userData,
+      userData
     );
 
     if (response.status === 200) {

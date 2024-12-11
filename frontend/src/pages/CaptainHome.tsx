@@ -9,10 +9,25 @@ import { SocketContext } from "../context/SocketContext";
 import { CaptainDataContext } from "../context/CaptainContext";
 import axios from "axios";
 
+interface RideUser {
+  fullname: {
+    firstname: string;
+    lastname: string;
+  };
+}
+interface Ride {
+  user: RideUser;
+  pickup: string;
+  destination: string;
+  fare: number;
+  _id: string;
+}
+
 const CaptainHome = () => {
   const [ridePopupPanel, setRidePopupPanel] = useState(false);
   const [confirmRidePopupPanel, setConfirmRidePopupPanel] = useState(false);
-  const [ride, setRide] = useState(null);
+
+  const [ride, setRide] = useState<Ride | null>(null);
 
   const ridePopupPanelRef = useRef(null);
   const confirmRidePopupPanelRef = useRef(null);
@@ -60,7 +75,7 @@ const CaptainHome = () => {
     const response = await axios.post(
       `${import.meta.env.VITE_BASE_URL}/rides/confirm`,
       {
-        rideId: ride._id,
+        rideId: ride?._id,
         captainId: captain?._id,
       },
       {
@@ -145,6 +160,7 @@ const CaptainHome = () => {
         className="fixed w-full h-screen z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
       >
         <ConfirmRidePopUp
+          ride={ride}
           setConfirmRidePopupPanel={setConfirmRidePopupPanel}
           setRidePopupPanel={setRidePopupPanel}
         />

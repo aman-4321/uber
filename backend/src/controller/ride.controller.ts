@@ -3,7 +3,9 @@ import { getFareValidation, rideValidation } from "../zod/rideValidation";
 import {
   confirmRide,
   createRide,
+  endRide,
   getfare,
+  startRide,
   VehicleType,
 } from "../services/ride.service";
 import {
@@ -12,7 +14,6 @@ import {
 } from "../services/maps.service";
 import { sendMessageToSocketId } from "../socket";
 import { rideModel } from "../models/ride.model";
-import { RideRouter } from "../routes/ride.routes";
 
 export const CreateRide = async (req: Request, res: Response) => {
   const { data, error, success } = rideValidation.safeParse(req.body);
@@ -115,6 +116,73 @@ export const ConfirmRide = async (req: Request, res: Response) => {
       message: "Ride Confirmed",
       ride,
     });
+  } catch (err) {
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: err,
+    });
+  }
+};
+
+export const StartRide = async (req: Request, res: Response) => {
+  const { rideId, otp } = req.query;
+
+  if (!rideId || !otp) {
+    res.status(404).json({
+      message: "Invalid Inputs",
+    });
+    return;
+  }
+
+  try {
+    const ride = await startRide({
+      rideId: rideId as string,
+      otp: otp as unknown as number,
+      captain: req.captain,
+    });
+
+    if (ride?.user?.socketId) {
+      sendMessageToSocketId(ride.user.socketId, {
+        event: "ride-started",
+        data: ride,
+      });
+    }
+
+    res.status(200).json(ride);
+    return;
+  } catch (err) {
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: err,
+    });
+  }
+};
+
+export const EndRide = async (req: Request, res: Response) => {
+  const { rideId } = req.query;
+
+  if (!rideId) {
+    res.status(404).json({
+      message: "Invalid Inputs",
+    });
+    return;
+  }
+
+  try {
+    const ride = await endRide({
+      rideId: rideId as string,
+      captain: req.captain,
+    });
+
+    if (ride.user?.socketId) {
+      sendMessageToSocketId(ride.user.socketId, {
+        event: "ride-ended",
+        data: ride,
+      });
+    }
+
+    res.status(200).json(ride);
+    return;
   } catch (err) {
     res.status(500).json({
       message: "Internal Server Error",
