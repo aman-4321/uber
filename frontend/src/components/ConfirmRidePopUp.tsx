@@ -2,13 +2,14 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-interface User {
+export interface User {
   fullname: {
     firstname: string;
     lastname: string;
   };
 }
-interface Ride {
+
+export interface Ride {
   pickup: string;
   destination: string;
   fare: number;
@@ -16,7 +17,7 @@ interface Ride {
   user: User;
 }
 
-interface ConfirmRidePopUpProps {
+export interface ConfirmRidePopUpProps {
   ride: Ride | null;
   setRidePopupPanel: (value: boolean) => void;
   setConfirmRidePopupPanel: (value: boolean) => void;
@@ -43,7 +44,7 @@ const ConfirmRidePopUp = ({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      }
+      },
     );
 
     if (response.status === 200) {

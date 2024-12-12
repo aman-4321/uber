@@ -14,6 +14,7 @@ interface Ride {
   fare: number;
   otp: number;
 }
+
 interface WaitingForDriverProps {
   waitingForDriver: (value: boolean) => void;
   ride: Ride | null;

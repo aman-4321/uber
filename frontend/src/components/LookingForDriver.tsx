@@ -1,10 +1,4 @@
-type VehicleType = "car" | "moto" | "auto";
-
-interface FareTypes {
-  car: number;
-  moto: number;
-  auto: number;
-}
+import { FareTypes, VehicleType } from "../types/types";
 
 interface LookingForDriverProps {
   setVehicleFound: (value: boolean) => void;

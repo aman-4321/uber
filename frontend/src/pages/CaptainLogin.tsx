@@ -98,4 +98,3 @@ const CaptainLogin = () => {
 };
 
 export default CaptainLogin;
-

@@ -1,3 +1,5 @@
+import { Status } from "../types/types";
+
 interface RideUser {
   _id: string;
   fullname: {
@@ -6,7 +8,6 @@ interface RideUser {
   };
 }
 
-type Status = "pending" | "accepted" | "ongoing" | "completed" | "cancelled";
 interface Ride {
   user: RideUser;
   pickup: string;

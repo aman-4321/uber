@@ -8,26 +8,7 @@ import ConfirmRidePopUp from "../components/ConfirmRidePopUp";
 import { SocketContext } from "../context/SocketContext";
 import { CaptainDataContext } from "../context/CaptainContext";
 import axios from "axios";
-
-type Status = "pending" | "accepted" | "ongoing" | "completed" | "cancelled";
-
-interface RideUser {
-  _id: string;
-  fullname: {
-    firstname: string;
-    lastname: string;
-  };
-}
-interface Ride {
-  user: RideUser;
-  pickup: string;
-  destination: string;
-  fare: number;
-  status: Status;
-  otp: string;
-  _id: string;
-  __v: number;
-}
+import { Ride } from "../types/types";
 
 const CaptainHome = () => {
   const [ridePopupPanel, setRidePopupPanel] = useState(false);
@@ -91,7 +72,7 @@ const CaptainHome = () => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      }
+      },
     );
 
     setRidePopupPanel(false);
@@ -110,7 +91,7 @@ const CaptainHome = () => {
         });
       }
     },
-    [ridePopupPanel]
+    [ridePopupPanel],
   );
 
   useGSAP(
@@ -125,7 +106,7 @@ const CaptainHome = () => {
         });
       }
     },
-    [confirmRidePopupPanel]
+    [confirmRidePopupPanel],
   );
 
   return (

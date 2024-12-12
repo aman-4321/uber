@@ -1,12 +1,6 @@
-type VehicleType = "car" | "moto" | "auto";
+import { FareTypes, VehicleType } from "../types/types";
 
-interface FareTypes {
-  car: number;
-  moto: number;
-  auto: number;
-}
-
-interface ConfirmRideProps {
+export interface ConfirmRideProps {
   setConfirmRidePanel: (value: boolean) => void;
   setVehicleFound: (value: boolean) => void;
   createRide: () => void;

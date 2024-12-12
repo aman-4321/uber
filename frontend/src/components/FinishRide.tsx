@@ -12,6 +12,7 @@ interface Ride {
   destination: string;
   fare: number;
 }
+
 interface FinishRideProps {
   setFinishRidePanel: (value: boolean) => void;
   ride: Ride | null;
@@ -30,7 +31,7 @@ const FinishRide = ({ ride, setFinishRidePanel }: FinishRideProps) => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      }
+      },
     );
 
     if (response.status === 200) {

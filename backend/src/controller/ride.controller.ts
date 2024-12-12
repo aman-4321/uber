@@ -25,30 +25,25 @@ export const CreateRide = async (req: Request, res: Response) => {
     });
     return;
   }
-  console.log("validation success");
 
   const { vehicleType, destination, pickup } = data;
 
   try {
-    console.log("reached try block");
     const ride = await createRide({
       user: req.user._id,
       pickup,
       destination,
       vehicleType: vehicleType as VehicleType,
     });
-    console.log("ride created: ", ride);
     res.status(201).json(ride);
 
     const pickupCoordinates = await getAddressCoordinate(pickup);
-    console.log("pickupCoordinates are: ", pickupCoordinates);
 
     const captainInRadius = await getCaptainsInTheRadius(
       pickupCoordinates.ltd,
       pickupCoordinates.lng,
-      2
+      2,
     );
-    console.log("captainInRadius are: ", captainInRadius);
 
     ride.otp = "";
 
@@ -56,10 +51,7 @@ export const CreateRide = async (req: Request, res: Response) => {
       .findOne({ _id: ride._id })
       .populate("user");
 
-    console.log("rideWithUser are: ", rideWithUser);
-
     captainInRadius.map((captain) => {
-      console.log("captain is: ", captain);
       if (captain && captain.socketId) {
         sendMessageToSocketId(captain.socketId, {
           event: "new-ride",
@@ -67,7 +59,6 @@ export const CreateRide = async (req: Request, res: Response) => {
         });
       }
     });
-    console.log("2nd one captainInRadius are: ", captainInRadius);
   } catch (err) {
     console.error("Error creating ride: ", err);
     res.status(500).json({

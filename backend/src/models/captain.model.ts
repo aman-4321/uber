@@ -1,35 +1,8 @@
-import mongoose, { Schema, Document, Model } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config";
-
-interface ICaptain extends Document {
-  fullname: {
-    firstname: string;
-    lastname?: string;
-  };
-  email: string;
-  password: string;
-  socketId?: string;
-  status: "active" | "inactive";
-  vehicle: {
-    color: string;
-    plate: string;
-    capacity: number;
-    vehicleType: "car" | "motorcycle" | "auto";
-  };
-  location?: {
-    ltd?: number;
-    lng?: number;
-  };
-
-  generateAuthToken(): string;
-  comparePassword(password: string): Promise<boolean>;
-}
-
-interface ICaptainModel extends Model<ICaptain> {
-  hashPassword(password: string): Promise<string>;
-}
+import { ICaptain, ICaptainModel } from "../types/types";
 
 const captainSchema = new Schema<ICaptain>({
   fullname: {
@@ -119,5 +92,5 @@ captainSchema.statics.hashPassword = async function (password: string) {
 
 export const captainModel = mongoose.model<ICaptain, ICaptainModel>(
   "captain",
-  captainSchema
+  captainSchema,
 );

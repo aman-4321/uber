@@ -2,23 +2,7 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config";
-
-export interface IUser extends Document {
-  fullname: {
-    firstname: string;
-    lastname?: string;
-  };
-  email: string;
-  password: string;
-  socketId?: string;
-
-  generateAuthToken(): string;
-  comparePassword(password: string): Promise<boolean>;
-}
-
-interface IUserModel extends Model<IUser> {
-  hashPassword(password: string): Promise<string>;
-}
+import { IUser, IUserModel } from "../types/types";
 
 const userSchema = new Schema<IUser>({
   fullname: {

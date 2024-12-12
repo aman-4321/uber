@@ -47,9 +47,9 @@ const LiveTracking = () => {
       });
     };
 
-    updatePosition(); // Initial position update
+    updatePosition();
 
-    const intervalId = setInterval(updatePosition, 60000); // Update every 10 seconds
+    const intervalId = setInterval(updatePosition, 60000);
 
     return () => clearInterval(intervalId);
   }, []);

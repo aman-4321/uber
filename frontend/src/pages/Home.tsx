@@ -12,16 +12,7 @@ import { SocketContext } from "../context/SocketContext";
 import UserContext from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import LiveTracking from "../components/LiveTracking";
-
-type VehicleType = "moto" | "car" | "auto";
-
-interface FareTypes {
-  car: number;
-  moto: number;
-  auto: number;
-}
-
-type ActiveField = "pickup" | "destination" | null | undefined;
+import { ActiveField, FareTypes, VehicleType } from "../types/types";
 
 const Home = () => {
   const [pickup, setPickup] = useState<string>("");
@@ -85,10 +76,10 @@ const Home = () => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
       setPickupSuggestions(
-        response.data.suggestions.map((item: any) => item.description)
+        response.data.suggestions.map((item: any) => item.description),
       );
     } catch (err) {
       console.error(err);
@@ -105,10 +96,10 @@ const Home = () => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
       setDestinationSuggestions(
-        response.data.suggestions.map((item: any) => item.description)
+        response.data.suggestions.map((item: any) => item.description),
       );
     } catch (err) {
       console.error(err);
@@ -141,7 +132,7 @@ const Home = () => {
         });
       }
     },
-    [panelOpen]
+    [panelOpen],
   );
 
   useGSAP(
@@ -156,7 +147,7 @@ const Home = () => {
         });
       }
     },
-    [vehiclePanel]
+    [vehiclePanel],
   );
 
   useGSAP(
@@ -171,7 +162,7 @@ const Home = () => {
         });
       }
     },
-    [confirmRidePanel]
+    [confirmRidePanel],
   );
 
   useGSAP(
@@ -186,7 +177,7 @@ const Home = () => {
         });
       }
     },
-    [vehicleFound]
+    [vehicleFound],
   );
 
   useGSAP(
@@ -201,7 +192,7 @@ const Home = () => {
         });
       }
     },
-    [waitingForDriver]
+    [waitingForDriver],
   );
 
   async function findTrip() {
@@ -215,7 +206,7 @@ const Home = () => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      }
+      },
     );
 
     setFare(response.data);
@@ -233,7 +224,7 @@ const Home = () => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      }
+      },
     );
   }
 

@@ -1,10 +1,4 @@
-interface FareTypes {
-  car: number;
-  moto: number;
-  auto: number;
-}
-
-type VehicleType = "car" | "moto" | "auto";
+import { FareTypes, VehicleType } from "../types/types";
 
 interface VehiclePanelProps {
   setVehiclePanel: (value: boolean) => void;

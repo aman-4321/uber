@@ -1,9 +1,15 @@
 import { rideModel } from "../models/ride.model";
 import { randomInt } from "node:crypto";
 import { getdistancetimeresult } from "./maps.service";
-import { IUser } from "../models/user.model";
 import { sendMessageToSocketId } from "../socket";
-import mongoose, { mongo } from "mongoose";
+import {
+  Captain,
+  createRideProps,
+  IUser,
+  PopulatedEndRide,
+  PopulatedRide,
+  PopulatedRideWithUser,
+} from "../types/types";
 
 export const getfare = async (pickup: string, destination: string) => {
   if (!pickup || !destination) {
@@ -37,17 +43,17 @@ export const getfare = async (pickup: string, destination: string) => {
     auto: Math.round(
       baseFare.auto +
         (distanceTime.distance.value / 1000) * perKmRate.auto +
-        (distanceTime.duration.value / 60) * perMinuteRate.auto
+        (distanceTime.duration.value / 60) * perMinuteRate.auto,
     ),
     car: Math.round(
       baseFare.car +
         (distanceTime.distance.value / 1000) * perKmRate.car +
-        (distanceTime.duration.value / 60) * perMinuteRate.car
+        (distanceTime.duration.value / 60) * perMinuteRate.car,
     ),
     moto: Math.round(
       baseFare.moto +
         (distanceTime.distance.value / 1000) * perKmRate.moto +
-        (distanceTime.duration.value / 60) * perMinuteRate.moto
+        (distanceTime.duration.value / 60) * perMinuteRate.moto,
     ),
   };
 
@@ -63,15 +69,6 @@ const getOtp = (num: number) => {
   const otp = randomInt(min, max).toString();
   return otp;
 };
-
-export type VehicleType = "auto" | "car" | "moto";
-
-interface createRideProps {
-  user: string;
-  pickup: string;
-  destination: string;
-  vehicleType: VehicleType;
-}
 
 export const createRide = async ({
   user,
@@ -96,17 +93,6 @@ export const createRide = async ({
   return ride;
 };
 
-interface Captain {
-  _id: string;
-}
-
-interface PopulatedRide {
-  _id: string;
-  user: IUser;
-  captain: string;
-  status: string;
-}
-
 export const confirmRide = async ({
   rideId,
   captain,
@@ -125,7 +111,7 @@ export const confirmRide = async ({
     {
       status: "accepted",
       captain: captain._id,
-    }
+    },
   );
 
   const ride = await rideModel
@@ -143,14 +129,6 @@ export const confirmRide = async ({
 
   return ride as unknown as PopulatedRide;
 };
-
-interface PopulatedRideWithUser {
-  _id: mongoose.Types.ObjectId;
-  user: IUser;
-  captain: any;
-  status: string;
-  otp: string;
-}
 
 export const startRide = async ({
   rideId,
@@ -192,7 +170,7 @@ export const startRide = async ({
     },
     {
       status: "ongoing",
-    }
+    },
   );
 
   if (ride.user?.socketId) {
@@ -204,13 +182,6 @@ export const startRide = async ({
 
   return ride as unknown as PopulatedRideWithUser;
 };
-
-interface PopulatedEndRide {
-  _id: mongoose.Types.ObjectId;
-  user: IUser;
-  captain: any;
-  status: string;
-}
 
 export const endRide = async ({
   rideId,
@@ -247,7 +218,7 @@ export const endRide = async ({
     },
     {
       status: "completed",
-    }
+    },
   );
 
   return ride as unknown as PopulatedEndRide;
