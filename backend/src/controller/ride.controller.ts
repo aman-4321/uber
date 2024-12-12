@@ -25,33 +25,41 @@ export const CreateRide = async (req: Request, res: Response) => {
     });
     return;
   }
+  console.log("validation success");
 
   const { vehicleType, destination, pickup } = data;
 
   try {
+    console.log("reached try block");
     const ride = await createRide({
       user: req.user._id,
       pickup,
       destination,
       vehicleType: vehicleType as VehicleType,
     });
+    console.log("ride created: ", ride);
     res.status(201).json(ride);
 
     const pickupCoordinates = await getAddressCoordinate(pickup);
+    console.log("pickupCoordinates are: ", pickupCoordinates);
 
     const captainInRadius = await getCaptainsInTheRadius(
       pickupCoordinates.ltd,
       pickupCoordinates.lng,
       2
     );
+    console.log("captainInRadius are: ", captainInRadius);
 
     ride.otp = "";
 
     const rideWithUser = await rideModel
-      .findOne({ id: ride._id })
+      .findOne({ _id: ride._id })
       .populate("user");
 
+    console.log("rideWithUser are: ", rideWithUser);
+
     captainInRadius.map((captain) => {
+      console.log("captain is: ", captain);
       if (captain && captain.socketId) {
         sendMessageToSocketId(captain.socketId, {
           event: "new-ride",
@@ -59,11 +67,12 @@ export const CreateRide = async (req: Request, res: Response) => {
         });
       }
     });
-
-    return;
+    console.log("2nd one captainInRadius are: ", captainInRadius);
   } catch (err) {
+    console.error("Error creating ride: ", err);
     res.status(500).json({
-      message: err,
+      message: "Error Creating Ride",
+      error: err,
     });
   }
 };
@@ -159,7 +168,7 @@ export const StartRide = async (req: Request, res: Response) => {
 };
 
 export const EndRide = async (req: Request, res: Response) => {
-  const { rideId } = req.query;
+  const { rideId } = req.body;
 
   if (!rideId) {
     res.status(404).json({
@@ -170,7 +179,7 @@ export const EndRide = async (req: Request, res: Response) => {
 
   try {
     const ride = await endRide({
-      rideId: rideId as string,
+      rideId,
       captain: req.captain,
     });
 
@@ -184,6 +193,7 @@ export const EndRide = async (req: Request, res: Response) => {
     res.status(200).json(ride);
     return;
   } catch (err) {
+    console.error("Error ending ride: ", err);
     res.status(500).json({
       message: "Internal Server Error",
       error: err,

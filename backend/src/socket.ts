@@ -51,11 +51,10 @@ export const initializeSocket = (server: HTTPServer): void => {
   });
 };
 
-export const sendMessageToSocketId = (
-  socketId: string,
-  messageObject: any
-): void => {
+export const sendMessageToSocketId = (socketId: string, messageObject: any) => {
+  console.log("message object is =>", messageObject);
   if (io) {
+    console.log(`Sending message to ${socketId} with data:`, messageObject);
     io.to(socketId).emit(messageObject.event, messageObject.data);
   } else {
     console.log("Socket.io not initialized");

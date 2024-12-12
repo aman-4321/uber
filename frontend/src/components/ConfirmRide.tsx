@@ -70,9 +70,9 @@ const ConfirmRide = ({
         </div>
         <button
           onClick={() => {
+            createRide();
             setVehicleFound(true);
             setConfirmRidePanel(false);
-            createRide();
           }}
           className="w-full mt-5 bg-green-600 text-white font-semibold p-2 rounded-lg"
         >

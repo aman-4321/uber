@@ -1,16 +1,21 @@
 interface RideUser {
+  _id: string;
   fullname: {
     firstname: string;
     lastname: string;
   };
 }
 
+type Status = "pending" | "accepted" | "ongoing" | "completed" | "cancelled";
 interface Ride {
   user: RideUser;
   pickup: string;
   destination: string;
   fare: number;
+  status: Status;
+  otp: string;
   _id: string;
+  __v: number;
 }
 
 interface RidePopUpProps {

@@ -9,7 +9,10 @@ import { SocketContext } from "../context/SocketContext";
 import { CaptainDataContext } from "../context/CaptainContext";
 import axios from "axios";
 
+type Status = "pending" | "accepted" | "ongoing" | "completed" | "cancelled";
+
 interface RideUser {
+  _id: string;
   fullname: {
     firstname: string;
     lastname: string;
@@ -20,13 +23,15 @@ interface Ride {
   pickup: string;
   destination: string;
   fare: number;
+  status: Status;
+  otp: string;
   _id: string;
+  __v: number;
 }
 
 const CaptainHome = () => {
   const [ridePopupPanel, setRidePopupPanel] = useState(false);
   const [confirmRidePopupPanel, setConfirmRidePopupPanel] = useState(false);
-
   const [ride, setRide] = useState<Ride | null>(null);
 
   const ridePopupPanelRef = useRef(null);
@@ -43,7 +48,10 @@ const CaptainHome = () => {
 
   useEffect(() => {
     if (captain) {
-      socket.emit("ride-request", { userId: captain._id, userType: "captain" });
+      console.log("emiting join event for captain", captain._id);
+      socket.emit("join", { userId: captain._id, userType: "captain" });
+    } else {
+      throw new Error("Captain is not provided");
     }
 
     const updateLocation = () => {
@@ -63,10 +71,11 @@ const CaptainHome = () => {
     const locationInterval = setInterval(updateLocation, 10000);
     updateLocation();
 
-    return () => clearInterval(locationInterval);
-  });
+    // return () => clearInterval(locationInterval);
+  }, [socket, captain]);
 
   socket.on("new-ride", (data) => {
+    console.log("new-ride data is =>", data);
     setRide(data);
     setRidePopupPanel(true);
   });
