@@ -5,8 +5,7 @@
   "main": "server.js",
   "scripts": {
     "build": "tsc -b",
-    "dev": "tsc -b && node dist/server.js",
-    "lint": "eslint ."
+    "dev": "tsc -b && node dist/server.js"
   },
   "keywords": [],
   "author": "",
